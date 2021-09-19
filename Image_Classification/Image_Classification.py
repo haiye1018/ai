@@ -20,6 +20,7 @@ from tensorflow import keras
 from tensorflow.keras import layers
 from tensorflow.keras.models import Sequential
 import matplotlib.pyplot as plt
+import datetime
 
 '''
 1.Examine and understand data
@@ -126,12 +127,16 @@ model.compile(optimizer='adam',
 
 model.summary()
 
+# tensorboard
+log_dir = "/tmp/logs/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1)
 # Train the model
 epochs=10
 history = model.fit(
   train_ds,
   validation_data=val_ds,
-  epochs=epochs
+  epochs=epochs,
+  callbacks=[tensorboard_callback]
 )
 
 # Visualize training results
@@ -204,7 +209,8 @@ epochs = 15
 history = model.fit(
   train_ds,
   validation_data=val_ds,
-  epochs=epochs
+  epochs=epochs,
+  callbacks=[tensorboard_callback]
 )
 
 
