@@ -35,10 +35,30 @@ batch_size = 32
 img_height = 180
 img_width = 180
 
+train_ds = tf.keras.preprocessing.image_dataset_from_directory(
+  data_dir,
+  validation_split=0.2,
+  subset="training",
+  seed=123,
+  image_size=(img_height, img_width),
+  batch_size=batch_size)
+
+val_ds = tf.keras.preprocessing.image_dataset_from_directory(
+  data_dir,
+  validation_split=0.2,
+  subset="validation",
+  seed=123,
+  image_size=(img_height, img_width),
+  batch_size=batch_size)
+
+class_names = train_ds.class_names
+print(class_names)
+
 # Configure the dataset for performance
 AUTOTUNE = tf.data.AUTOTUNE
 train_ds = train_ds.cache().shuffle(1000).prefetch(buffer_size=AUTOTUNE)
 val_ds = val_ds.cache().prefetch(buffer_size=AUTOTUNE)
+
 
 # Create the model
 num_classes = 5
@@ -77,34 +97,21 @@ model.compile(optimizer='adam',
 
 model.summary()
 
+log_dir="/tmp/logs/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1)
+
 epochs = 15
+#history = model.fit(
+#  train_ds,
+#  validation_data=val_ds,
+#  epochs=epochs,
+#  callbacks=[tensorboard_callback]
+#)
 history = model.fit(
   train_ds,
   validation_data=val_ds,
   epochs=epochs
 )
-
-
-# Visualize training results
-acc = history.history['accuracy']
-val_acc = history.history['val_accuracy']
-loss = history.history['loss']
-val_loss = history.history['val_loss']
-epochs_range = range(epochs)
-
-plt.figure(figsize=(8, 8))
-plt.subplot(1, 2, 1)
-plt.plot(epochs_range, acc, label='Training Accuracy')
-plt.plot(epochs_range, val_acc, label='Validation Accuracy')
-plt.legend(loc='lower right')
-plt.title('Training and Validation Accuracy')
-plt.subplot(1, 2, 2)
-plt.plot(epochs_range, loss, label='Training Loss')
-plt.plot(epochs_range, val_loss, label='Validation Loss')
-plt.legend(loc='upper right')
-plt.title('Training and Validation Loss')
-plt.show()
-
 
 # Predict on new data
 sunflower_url = "https://storage.googleapis.com/download.tensorflow.org/example_images/592px-Red_sunflower.jpg"
@@ -124,3 +131,4 @@ print(
     .format(class_names[np.argmax(score)], 100 * np.max(score))
 )
 
+model.save('/tmp/my_model.h5')
