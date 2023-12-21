@@ -95,11 +95,11 @@ for i in range(len(models)):
 
     all_predict_values.append(all_predict_value.cpu())
 
-with open('test_loader',"wb") as f:
+with open('train-well/test_loader',"wb") as f:
     pickle.dump(test_loader, f)
-with open('all_y_true',"wb") as f:
+with open('train-well/all_y_true',"wb") as f:
     pickle.dump(all_y_true, f)
-with open('all_predict_values',"wb") as f:
+with open('train-well/all_predict_values',"wb") as f:
     pickle.dump(all_predict_values, f)
 
 
