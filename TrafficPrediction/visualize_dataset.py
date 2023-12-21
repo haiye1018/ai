@@ -25,7 +25,7 @@ def show_pred(test_loader, all_y_true, all_predict_values):
     plt.plot(test_loader.dataset.recover_data(test_loader.dataset.flow_norm[0], test_loader.dataset.flow_norm[1],
                                               all_predict_values[2])[:24 * 12, node_id, 0, 0], label='GAT pred')
     plt.legend()
-    plt.savefig("../assets/the first day pred flow in node {}.png".format(str(node_id)), dpi=400)
+    #plt.savefig("../assets/the first day pred flow in node {}.png".format(str(node_id)), dpi=400)
     plt.show()
 
     plt.title("no. {} node the two weeks".format(node_id))
@@ -40,7 +40,7 @@ def show_pred(test_loader, all_y_true, all_predict_values):
     plt.plot(test_loader.dataset.recover_data(test_loader.dataset.flow_norm[0], test_loader.dataset.flow_norm[1],
                                               all_predict_values[2])[:, node_id, 0, 0], label='GAT pred')
     plt.legend()
-    plt.savefig("../assets/the first two weeks pred flow in node {}.png".format(str(node_id)), dpi=400)
+    #plt.savefig("../assets/the first two weeks pred flow in node {}.png".format(str(node_id)), dpi=400)
     plt.show()
 
     mae = MAE(test_loader.dataset.recover_data(test_loader.dataset.flow_norm[0], test_loader.dataset.flow_norm[1],

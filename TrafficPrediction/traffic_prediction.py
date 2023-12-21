@@ -13,6 +13,8 @@ from metrics import MAE, MAPE, RMSE
 from data_loader import get_loader
 from visualize_dataset import show_pred
 
+import pickle
+
 seed = 2020
 random.seed(seed)
 torch.manual_seed(seed)
@@ -92,6 +94,13 @@ for i in range(len(models)):
             10 * total_loss / (len(test_loader.dataset) / 64), epoch_mae, epoch_rmse, epoch_mape))
 
     all_predict_values.append(all_predict_value.cpu())
-show_pred(test_loader, all_y_true.cpu(), all_predict_values)
+
+with open('test_loader',"wb") as f:
+    pickle.dump(test_loader, f)
+with open('all_y_true',"wb") as f:
+    pickle.dump(all_y_true, f)
+with open('all_predict_values',"wb") as f:
+    pickle.dump(all_predict_values, f)
+
 
 
